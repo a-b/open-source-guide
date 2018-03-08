@@ -1,20 +1,22 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
-  <link href="/assets/css/index.css" rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="https://assets-cdn.github.com/favicon.ico">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-  <script src="{{ "/js/script.js" | prepend: site.baseurl }}"></script>
-  <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-    ga('create', 'UA-3769691-72', 'auto');
-    ga('send', 'pageview');
-
-  </script>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
+  <link href="{{ "/assets/css/index.css" | relative_url }}" rel="stylesheet">
   {% seo %}
+  {% if page.lang and page.untranslated != true and site.data.locales.size > 1 %}
+    {% assign locales = site.data.locales | sort %}
+    {% for locale in locales %}
+      {% assign lang = locale[0] %}
+      {% assign page_lang_slash = page.lang | append: '/' | prepend: '/' %}
+      {% assign default_url = page.url | replace: page_lang_slash, '/' %}
+      {% if lang == "en" %}
+      <link rel="alternate" hreflang="en" href="{{ site.url }}{{ default_url }}" />
+      <link rel="alternate" hreflang="x-default" href="{{ site.url }}{{ default_url }}" />
+      {% else %}
+      <link rel="alternate" hreflang="{{ lang }}" href="{{ site.url }}/{{ lang }}{{ default_url }}" />
+      {% endif %}
+    {% endfor %}
+  {% endif %}
 </head>
